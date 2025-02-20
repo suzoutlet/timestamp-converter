@@ -4,17 +4,35 @@ window.onload = function () {
     let currentTimestamp = Math.floor(Date.now() / 1000); // Current Unix timestamp
     document.getElementById('current-timestamp').textContent = currentTimestamp;
 
-    // Display converted result
+    // Display converted result in table format
     function displayConvertedResult(timestamp) {
         const date = new Date(timestamp * 1000);
         const gmtDate = date.toGMTString();
         const localTime = date.toLocaleString();
 
         const result = `
-            <p>Unix Timestamp: ${timestamp}</p>
-            <p>GMT: ${gmtDate}</p>
-            <p>Your Time Zone: ${localTime} (${Intl.DateTimeFormat().resolvedOptions().timeZone})</p>
-            <p>Relative: ${getRelativeTime(timestamp)} ago</p>
+            <table>
+                <tr>
+                    <th>Format</th>
+                    <th>Seconds</th>
+                </tr>
+                <tr>
+                    <td>Unix Timestamp</td>
+                    <td>${timestamp}</td>
+                </tr>
+                <tr>
+                    <td>GMT</td>
+                    <td>${gmtDate}</td>
+                </tr>
+                <tr>
+                    <td>Your Time Zone</td>
+                    <td>${localTime} (${Intl.DateTimeFormat().resolvedOptions().timeZone})</td>
+                </tr>
+                <tr>
+                    <td>Relative</td>
+                    <td>${getRelativeTime(timestamp)} ago</td>
+                </tr>
+            </table>
             <p><a href="https://www.epochconverter.com/?t=${timestamp}" target="_blank">Open in Epoch Converter</a></p>
         `;
         document.getElementById('converted-result').innerHTML = result;
