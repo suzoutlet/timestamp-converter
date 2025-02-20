@@ -1,92 +1,68 @@
-window.onload = function () {
-    // Default timestamp to display
-    let timestampInput = document.getElementById('timestamp');
-    let currentTimestamp = Math.floor(Date.now() / 1000); // Current Unix timestamp
-    document.getElementById('current-timestamp').textContent = currentTimestamp;
-
-    // Display converted result in table format
-    function displayConvertedResult(timestamp) {
-        const date = new Date(timestamp * 1000);
-        const gmtDate = date.toGMTString();
-        const localTime = date.toLocaleString();
-
-        const result = `
-            <table>
-                <tr>
-                    <th>Format</th>
-                    <th>Seconds</th>
-                </tr>
-                <tr>
-                    <td>Unix Timestamp</td>
-                    <td>${timestamp}</td>
-                </tr>
-                <tr>
-                    <td>GMT</td>
-                    <td>${gmtDate}</td>
-                </tr>
-                <tr>
-                    <td>Your Time Zone</td>
-                    <td>${localTime} (${Intl.DateTimeFormat().resolvedOptions().timeZone})</td>
-                </tr>
-                <tr>
-                    <td>Relative</td>
-                    <td>${getRelativeTime(timestamp)} ago</td>
-                </tr>
-            </table>
-            <p><a href="https://www.epochconverter.com/?t=${timestamp}" target="_blank">Open in Epoch Converter</a></p>
-        `;
-        document.getElementById('converted-result').innerHTML = result;
+// Function to handle Unix timestamp conversion
+function convertTimestamp() {
+    const timestampInput = document.getElementById('timestampInput').value;
+    const timestamp = parseInt(timestampInput);
+    
+    if (!timestamp || isNaN(timestamp)) {
+        muteInputField();  // Mute the input if invalid timestamp
+        return;
     }
 
-    // Function to get relative time (e.g., "5 hours ago")
-    function getRelativeTime(timestamp) {
-        const now = new Date();
-        const diff = now - new Date(timestamp * 1000);
-        const hours = Math.floor(diff / 1000 / 60 / 60);
-        return hours + (hours === 1 ? " hour" : " hours");
+    // Convert and display the timestamp
+    const gmtTime = new Date(timestamp * 1000).toUTCString();
+    const localTime = new Date(timestamp * 1000).toLocaleString();
+    const relativeTime = timeAgo(timestamp);
+
+    document.getElementById('gmtTime').innerText = gmtTime;
+    document.getElementById('localTime').innerText = localTime;
+    document.getElementById('relativeTime').innerText = relativeTime;
+}
+
+// Function to mute the input field if no valid timestamp
+function muteInputField() {
+    const timestampInput = document.getElementById('timestampInput');
+    timestampInput.style.backgroundColor = "#ffcccc";  // Muting with color
+    timestampInput.disabled = true;
+    setTimeout(() => {
+        timestampInput.style.backgroundColor = "";
+        timestampInput.disabled = false;
+    }, 2000); // Reset after 2 seconds
+}
+
+// Convert Date & Time to Unix Timestamp
+function convertDateToTimestamp() {
+    const year = parseInt(document.getElementById('year').value);
+    const month = parseInt(document.getElementById('month').value) - 1;  // Month is 0-indexed
+    const day = parseInt(document.getElementById('day').value);
+    const hour = parseInt(document.getElementById('hour').value);
+    const minutes = parseInt(document.getElementById('minutes').value);
+    const seconds = parseInt(document.getElementById('seconds').value);
+
+    const date = new Date(year, month, day, hour, minutes, seconds);
+    const unixTimestamp = Math.floor(date.getTime() / 1000);
+    
+    const gmtConvertedTime = date.toUTCString();
+    const localConvertedTime = date.toLocaleString();
+    const relativeConvertedTime = timeAgo(unixTimestamp);
+
+    document.getElementById('unixTimestamp').innerText = unixTimestamp;
+    document.getElementById('gmtConvertedTime').innerText = gmtConvertedTime;
+    document.getElementById('localConvertedTime').innerText = localConvertedTime;
+    document.getElementById('relativeConvertedTime').innerText = relativeConvertedTime;
+}
+
+// Function to get relative time (e.g. "3 hours ago")
+function timeAgo(timestamp) {
+    const currentTime = Math.floor(Date.now() / 1000);
+    const diff = currentTime - timestamp;
+    const hours = Math.floor(diff / 3600);
+    const minutes = Math.floor((diff % 3600) / 60);
+
+    if (hours > 0) {
+        return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+    } else if (minutes > 0) {
+        return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+    } else {
+        return "Just now";
     }
-
-    // Convert button click event (Unix Timestamp)
-    document.getElementById('convert-timestamp').addEventListener('click', function () {
-        const timestamp = timestampInput.value.trim();
-
-        if (timestamp === "") {
-            timestampInput.classList.add('invalid');  // Show feedback for empty input
-            document.getElementById('converted-result').innerHTML = '<p>Please enter a valid Unix timestamp.</p>';
-        } else {
-            timestampInput.classList.remove('invalid');
-            displayConvertedResult(timestamp);
-        }
-    });
-
-    // Handle URL with timestamp
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.has('timestamp')) {
-        timestampInput.value = urlParams.get('timestamp');
-        displayConvertedResult(urlParams.get('timestamp'));
-    }
-
-    // Handle Date & Time to Unix conversion
-    document.getElementById('date-form').addEventListener('submit', function (event) {
-        event.preventDefault();
-
-        const year = document.getElementById('year').value;
-        const month = document.getElementById('month').value - 1; // Month is 0-based
-        const day = document.getElementById('day').value;
-        const hour = document.getElementById('hour').value;
-        const minute = document.getElementById('minute').value;
-        const second = document.getElementById('second').value;
-
-        const date = new Date(year, month, day, hour, minute, second);
-        const timestamp = Math.floor(date.getTime() / 1000);
-
-        const result = `
-            <p>Unix Timestamp: ${timestamp}</p>
-            <p>GMT: ${date.toGMTString()}</p>
-            <p>Your Time Zone: ${date.toLocaleString()} (${Intl.DateTimeFormat().resolvedOptions().timeZone})</p>
-            <p>Relative: ${getRelativeTime(timestamp)} ago</p>
-        `;
-
-        document.getElementById('date-result').innerHTML = result;
-    });
-};
+}
