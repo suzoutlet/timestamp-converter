@@ -17,7 +17,7 @@
             border-radius: 8px;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
             padding: 20px;
-            max-width: 950px;
+            max-width: 800px; /* Adjusted to fit the new layout */
             margin: 0 auto;
         }
         h1 {
@@ -26,9 +26,8 @@
         input[type="text"], input[type="number"] {
             padding: 10px;
             font-size: 16px;
-            margin-bottom: 10px;
-            width: 100%;
-            max-width: 250px;
+            margin: 5px;
+            width: calc(33% - 10px); /* Form fields on the same line */
             border-radius: 4px;
             border: 1px solid #ddd;
         }
@@ -39,7 +38,7 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
-            margin-bottom: 20px;
+            margin: 20px 0;
         }
         button:hover {
             background-color: #0056b3;
@@ -71,10 +70,9 @@
         .date-conversion {
             margin-top: 40px;
         }
-        .form-inline {
+        .form-row {
             display: flex;
-            justify-content: space-between;
-            gap: 10px;
+            justify-content: center;
             flex-wrap: wrap;
         }
     </style>
@@ -91,9 +89,8 @@
 
         <!-- Timestamp Converter Section -->
         <p>Enter the Unix timestamp to see the conversion in different formats:</p>
-        <input type="text" id="timestampInput" placeholder="Enter Unix Timestamp" value="">
+        <input type="text" id="timestampInput" placeholder="Enter Unix Timestamp">
         <button onclick="convertTimestamp()">Convert Timestamp</button>
-        <p id="errorMessage" style="color: red; display: none;">Please enter a valid Unix timestamp.</p>
 
         <table id="timestampTable">
             <tr>
@@ -117,14 +114,14 @@
         <!-- Date & Time Converter Section -->
         <div class="date-conversion">
             <h3>Enter a Date & Time to Convert to Unix Timestamp:</h3>
-            <div class="form-inline">
-                <input type="number" id="year" value="2025" placeholder="Year">
-                <input type="number" id="month" value="2" placeholder="Month">
-                <input type="number" id="day" value="20" placeholder="Day">
-                <input type="number" id="hour" value="2" placeholder="Hour">
-                <input type="number" id="minutes" value="32" placeholder="Minutes">
-                <input type="number" id="seconds" value="58" placeholder="Seconds">
-            </div><br><br>
+            <div class="form-row">
+                <input type="number" id="year" placeholder="Year" value="2025">
+                <input type="number" id="month" placeholder="Month" value="2">
+                <input type="number" id="day" placeholder="Day" value="20">
+                <input type="number" id="hour" placeholder="Hour (24 hour)" value="2">
+                <input type="number" id="minutes" placeholder="Minutes" value="32">
+                <input type="number" id="seconds" placeholder="Seconds" value="58">
+            </div><br>
             <button onclick="convertDateToTimestamp()">Convert to Unix Timestamp</button>
 
             <table id="dateConversionTable">
@@ -162,12 +159,10 @@
             const timestampInput = document.getElementById('timestampInput').value;
             const timestamp = parseInt(timestampInput);
 
-            if (isNaN(timestamp)) {
-                document.getElementById('errorMessage').style.display = "block";
+            if (!timestampInput || isNaN(timestamp)) {
+                alert('Please enter a valid Unix timestamp');
                 return;
             }
-
-            document.getElementById('errorMessage').style.display = "none";
 
             // Convert timestamp to different formats
             const date = new Date(timestamp * 1000); // Convert seconds to milliseconds
@@ -176,8 +171,9 @@
             const gmtTime = date.toGMTString();
             document.getElementById('gmtTime').innerText = gmtTime;
 
-            // Local time format
-            const localTime = date.toLocaleString('en-US', { timeZoneName: "short" });
+            // Local time format (with timezone)
+            const options = { timeZoneName: 'short' };
+            const localTime = date.toLocaleString('en-US', options);
             document.getElementById('localTime').innerText = localTime;
 
             // Relative time (e.g., 7 hours ago)
@@ -205,7 +201,7 @@
             const gmtTime = date.toGMTString();
             document.getElementById('gmtTimeResult').innerText = gmtTime;
 
-            const localTime = date.toLocaleString('en-US', { timeZoneName: "short" });
+            const localTime = date.toLocaleString();
             document.getElementById('localTimeResult').innerText = localTime;
 
             const relativeTime = getRelativeTime(date);
@@ -235,4 +231,11 @@
             const timestampFromUrl = getQueryParam('timestamp');
             if (timestampFromUrl) {
                 document.getElementById('timestampInput').value = timestampFromUrl;
-                convertTimestamp(); //
+                convertTimestamp(); // Convert the timestamp passed in the URL
+            } else {
+                convertTimestamp(); // Convert the default timestamp or the user-entered timestamp
+            }
+        };
+    </script>
+</body>
+</html>
