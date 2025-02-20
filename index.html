@@ -4,23 +4,140 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Timestamp Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            color: #333;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #007bff;
+        }
+        input[type="text"] {
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 10px;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        table {
+            margin-top: 20px;
+            width: 100%;
+            max-width: 500px;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        td {
+            background-color: #f9f9f9;
+        }
+        .relative {
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Timestamp Converter</h1>
+        <p>Enter the Unix timestamp to see the conversion in different formats:</p>
+        <input type="text" id="timestampInput" placeholder="Enter Unix Timestamp" value="1739972391">
+        <button onclick="convertTimestamp()">Convert Timestamp</button>
+
+        <table id="timestampTable">
+            <tr>
+                <th>Format</th>
+                <th>Seconds</th>
+            </tr>
+            <tr>
+                <td>GMT</td>
+                <td id="gmtTime">Loading...</td>
+            </tr>
+            <tr>
+                <td>Your Time Zone</td>
+                <td id="localTime">Loading...</td>
+            </tr>
+            <tr>
+                <td>Relative</td>
+                <td id="relativeTime" class="relative">Loading...</td>
+            </tr>
+        </table>
+    </div>
+
     <script>
         function convertTimestamp() {
-            const params = new URLSearchParams(window.location.search);
-            const timestamp = params.get('timestamp');
-            if (timestamp) {
-                const date = new Date(parseInt(timestamp) * 1000);
-                document.getElementById('result').textContent = `Converted Time: ${date.toUTCString()}`;
-            } else {
-                document.getElementById('result').textContent = 'No timestamp provided.';
+            const timestampInput = document.getElementById('timestampInput').value;
+            const timestamp = parseInt(timestampInput);
+
+            if (isNaN(timestamp)) {
+                alert('Please enter a valid Unix timestamp');
+                return;
             }
+
+            // Convert timestamp to different formats
+            const date = new Date(timestamp * 1000); // Convert seconds to milliseconds
+
+            // GMT format
+            const gmtTime = date.toGMTString();
+            document.getElementById('gmtTime').innerText = gmtTime;
+
+            // Local time format
+            const localTime = date.toLocaleString();
+            document.getElementById('localTime').innerText = localTime;
+
+            // Relative time (e.g., 7 hours ago)
+            const relativeTime = getRelativeTime(date);
+            document.getElementById('relativeTime').innerText = relativeTime;
         }
+
+        // Function to get relative time (e.g., 7 hours ago)
+        function getRelativeTime(date) {
+            const now = new Date();
+            const diff = now - date; // Difference in milliseconds
+            const seconds = Math.floor(diff / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const hours = Math.floor(minutes / 60);
+            const days = Math.floor(hours / 24);
+
+            if (days > 0) return `${days} day${days > 1 ? 's' : ''} ago`;
+            if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+            if (minutes > 0) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+            return `${seconds} second${seconds > 1 ? 's' : ''} ago`;
+        }
+
+        // Convert default timestamp on page load
+        window.onload = convertTimestamp;
     </script>
-</head>
-<body onload="convertTimestamp()">
-    <h1>Timestamp Converter</h1>
-    <p id="result">Loading...</p>
-    <p>To use this tool, append <code>?timestamp=<em>your-timestamp</em></code> to the URL.</p>
-    <p>Example: <code>https://github.com/suzoutlet.github.io/timestamp-converter?timestamp=1739972391</code></p>
 </body>
 </html>
