@@ -1,8 +1,20 @@
 // Function to get the current Unix epoch time and display it
-function displayCurrentEpoch() {
-    const currentEpoch = Math.floor(Date.now() / 1000); // Get current Unix timestamp
-    document.getElementById('currentEpoch').innerText = currentEpoch;
-}
+// function displayCurrentEpoch() {
+//     const currentEpoch = Math.floor(Date.now() / 1000); // Get current Unix timestamp
+//     document.getElementById('currentEpoch').innerText = currentEpoch;
+// }
+
+// Fetch current Unix epoch time based on current system time
+        function updateCurrentEpoch() {
+            const currentEpoch = Math.floor(Date.now() / 1000); // Get the current timestamp in seconds
+            document.getElementById('currentEpoch').innerText = currentEpoch;
+        }
+
+// Function to get query parameter (timestamp)
+// function getQueryParam(name) {
+//     const urlParams = new URLSearchParams(window.location.search);
+//     return urlParams.get(name);
+// }
 
 // Function to handle Unix timestamp conversion
 function convertTimestamp() {
@@ -88,10 +100,10 @@ function handleGetParam() {
 }
 
 // Call displayCurrentEpoch function when the page loads
-window.onload = function() {
-    handleGetParam(); // Handle URL timestamp parameter
-    displayCurrentEpoch(); // Display current Unix epoch time
-};
+// window.onload = function() {
+//     handleGetParam(); // Handle URL timestamp parameter
+//     displayCurrentEpoch(); // Display current Unix epoch time
+// };
 
 // Initialize the page with URL handling
 window.onload = function() {
