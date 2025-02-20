@@ -1,9 +1,3 @@
-// Function to get the current Unix epoch time and display it
-// function displayCurrentEpoch() {
-//     const currentEpoch = Math.floor(Date.now() / 1000); // Get current Unix timestamp
-//     document.getElementById('currentEpoch').innerText = currentEpoch;
-// }
-
 // Fetch current Unix epoch time based on current system time
         function updateCurrentEpoch() {
             const currentEpoch = Math.floor(Date.now() / 1000); // Get the current timestamp in seconds
