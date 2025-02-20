@@ -66,3 +66,22 @@ function timeAgo(timestamp) {
         return "Just now";
     }
 }
+
+// Function to handle GET parameter and pre-fill input if available
+function handleGetParam() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const timestampFromUrl = urlParams.get('timestamp');
+    
+    if (timestampFromUrl) {
+        document.getElementById('timestampInput').value = timestampFromUrl;
+        convertTimestamp();  // Automatically convert based on the timestamp in the URL
+    } else {
+        document.getElementById('timestampInput').value = "1739993745"; // Default value
+        convertTimestamp();  // Convert with default timestamp
+    }
+}
+
+// Initialize the page with URL handling
+window.onload = function() {
+    handleGetParam();
+};
