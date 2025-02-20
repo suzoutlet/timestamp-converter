@@ -11,10 +11,10 @@
         }
 
 // Function to get query parameter (timestamp)
-// function getQueryParam(name) {
-//     const urlParams = new URLSearchParams(window.location.search);
-//     return urlParams.get(name);
-// }
+function getQueryParam(name) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(name);
+}
 
 // Function to handle Unix timestamp conversion
 function convertTimestamp() {
@@ -101,10 +101,24 @@ function handleGetParam() {
 
 // Call displayCurrentEpoch function when the page loads
 // Update current Unix timestamp display
+// window.onload = function() {
+//     handleGetParam(); // Handle URL timestamp parameter
+//    // displayCurrentEpoch(); // Display current Unix epoch time
+//     updateCurrentEpoch();
+// };
+
+// On page load
 window.onload = function() {
-    handleGetParam(); // Handle URL timestamp parameter
-   // displayCurrentEpoch(); // Display current Unix epoch time
+    // Update current Unix timestamp display
     updateCurrentEpoch();
+
+    const timestampFromUrl = getQueryParam('timestamp');
+    if (timestampFromUrl) {
+        document.getElementById('timestampInput').value = timestampFromUrl;
+        convertTimestamp(); // Convert the timestamp passed in the URL
+    } else {
+        convertTimestamp(); // Convert the default timestamp or the user-entered timestamp
+    }
 };
 
 // Initialize the page with URL handling
