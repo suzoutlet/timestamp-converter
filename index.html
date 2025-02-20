@@ -4,46 +4,69 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Unix Timestamp Converter</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>Unix Timestamp Converter</h1>
-        
-        <!-- Current Unix timestamp display -->
-        <div class="current-timestamp">
-            <p>The current Unix epoch time is <span id="current-timestamp"></span></p>
-        </div>
+        <!-- Timestamp Converter Section -->
+        <p>Enter the Unix timestamp to see the conversion in different formats:</p>
+        <input type="text" id="timestampInput" placeholder="Enter Unix Timestamp" oninput="clearError()">
+        <button onclick="convertTimestamp()">Convert Timestamp</button>
 
-        <!-- Unix timestamp converter -->
-        <div class="timestamp-converter">
-            <h2>Enter Unix Timestamp</h2>
-            <input type="number" id="timestamp" placeholder="Enter Unix timestamp" value="1740019493" />
-            <button id="convert-timestamp">Convert</button>
-            <div id="converted-result" class="result"></div>
-        </div>
+        <table id="timestampTable">
+            <tr>
+                <th>Format</th>
+                <th>Seconds</th>
+            </tr>
+            <tr>
+                <td>GMT</td>
+                <td id="gmtTime">Loading...</td>
+            </tr>
+            <tr>
+                <td>Your Time Zone</td>
+                <td id="localTime">Loading...</td>
+            </tr>
+            <tr>
+                <td>Relative</td>
+                <td id="relativeTime" class="relative">Loading...</td>
+            </tr>
+        </table>
 
-        <div class="separator"></div>
-
-        <!-- Date and time to Unix timestamp converter -->
-        <div class="date-converter">
-            <h2>Enter a Date & Time</h2>
-            <form id="date-form">
-                <label for="year">Year</label>
-                <input type="number" id="year" name="year" placeholder="2025">
-                <label for="month">Month</label>
-                <input type="number" id="month" name="month" placeholder="02">
-                <label for="day">Day</label>
-                <input type="number" id="day" name="day" placeholder="20">
-                <label for="hour">Hour</label>
-                <input type="number" id="hour" name="hour" placeholder="02">
-                <label for="minute">Minute</label>
-                <input type="number" id="minute" name="minute" placeholder="32">
-                <label for="second">Second</label>
-                <input type="number" id="second" name="second" placeholder="58">
-                <button type="submit">Convert</button>
+        <!-- Unix Timestamp Section -->
+        <div id="dateTimeSection">
+            <h3>Enter a Date & Time to Convert to Unix Timestamp:</h3>
+            <form id="dateForm">
+                <label>Year</label><input type="number" id="year" min="1900" max="2099" value="2025">
+                <label>Month</label><input type="number" id="month" min="1" max="12" value="2">
+                <label>Day</label><input type="number" id="day" min="1" max="31" value="20">
+                <label>Hour (24 hour)</label><input type="number" id="hour" min="0" max="23" value="2">
+                <label>Minutes</label><input type="number" id="minutes" min="0" max="59" value="32">
+                <label>Seconds</label><input type="number" id="seconds" min="0" max="59" value="58">
+                <button type="button" onclick="convertDateToTimestamp()">Convert Date & Time</button>
             </form>
-            <div id="date-result" class="result"></div>
+
+            <table id="convertedDateTable">
+                <tr>
+                    <th>Format</th>
+                    <th>Seconds</th>
+                </tr>
+                <tr>
+                    <td>Unix Timestamp</td>
+                    <td id="unixTimestamp">Loading...</td>
+                </tr>
+                <tr>
+                    <td>GMT</td>
+                    <td id="gmtConvertedTime">Loading...</td>
+                </tr>
+                <tr>
+                    <td>Your Time Zone</td>
+                    <td id="localConvertedTime">Loading...</td>
+                </tr>
+                <tr>
+                    <td>Relative</td>
+                    <td id="relativeConvertedTime" class="relative">Loading...</td>
+                </tr>
+            </table>
         </div>
     </div>
 
