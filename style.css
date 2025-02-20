@@ -26,7 +26,7 @@ input {
 }
 
 button {
-    background-color: #4CAF50;
+    background-color: #007bff;
     color: white;
     padding: 10px;
     border: none;
@@ -35,7 +35,7 @@ button {
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #0056b3;
 }
 
 table {
@@ -43,13 +43,20 @@ table {
     border-collapse: collapse;
     margin-top: 20px;
 }
-
+th {
+    background-color: #007bff;
+    color: white;
+}
+td {
+    background-color: #f9f9f9;
+}
 table, th, td {
     border: 1px solid #ddd;
 }
 
 th, td {
     padding: 12px;
+    border: 1px solid #ddd;
     text-align: left;
 }
 
