@@ -96,3 +96,27 @@ input[disabled] {
     color: #333;
     font-size: 16px;
 }
+
+/* Adding the table-like layout for the result */
+#converted-result {
+    margin-top: 20px;
+}
+
+#converted-result table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#converted-result th, #converted-result td {
+    padding: 10px;
+    text-align: left;
+}
+
+#converted-result th {
+    background-color: #007bff;
+    color: white;
+}
+
+#converted-result tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
