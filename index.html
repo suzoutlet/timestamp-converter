@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timestamp Converter</title>
+    <script>
+        function convertTimestamp() {
+            const params = new URLSearchParams(window.location.search);
+            const timestamp = params.get('timestamp');
+            if (timestamp) {
+                const date = new Date(parseInt(timestamp) * 1000);
+                document.getElementById('result').textContent = `Converted Time: ${date.toUTCString()}`;
+            } else {
+                document.getElementById('result').textContent = 'No timestamp provided.';
+            }
+        }
+    </script>
+</head>
+<body onload="convertTimestamp()">
+    <h1>Timestamp Converter</h1>
+    <p id="result">Loading...</p>
+    <p>To use this tool, append <code>?timestamp=<em>your-timestamp</em></code> to the URL.</p>
+    <p>Example: <code>https://github.com/suzoutlet.github.io/timestamp-converter?timestamp=1739972391</code></p>
+</body>
+</html>
