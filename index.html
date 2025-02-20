@@ -3,239 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Timestamp Converter</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f4f8;
-            color: #333;
-            text-align: center;
-            padding: 20px;
-        }
-        .container {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            max-width: 800px; /* Adjusted to fit the new layout */
-            margin: 0 auto;
-        }
-        h1 {
-            color: #007bff;
-        }
-        input[type="text"], input[type="number"] {
-            padding: 10px;
-            font-size: 16px;
-            margin: 5px;
-            width: calc(33% - 10px); /* Form fields on the same line */
-            border-radius: 4px;
-            border: 1px solid #ddd;
-        }
-        button {
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin: 20px 0;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        table {
-            margin-top: 20px;
-            width: 100%;
-            max-width: 500px;
-            margin: 20px auto;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 12px;
-            border: 1px solid #ddd;
-        }
-        th {
-            background-color: #007bff;
-            color: white;
-        }
-        td {
-            background-color: #f9f9f9;
-        }
-        .relative {
-            color: #888;
-        }
-        .timestamp-section {
-            margin-bottom: 40px;
-        }
-        .date-conversion {
-            margin-top: 40px;
-        }
-        .form-row {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-    </style>
+    <title>Unix Timestamp Converter</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <div class="container">
-        <h1>Timestamp Converter</h1>
-
-        <!-- Current Unix Epoch Time -->
-        <div class="timestamp-section">
-            <h2>The current Unix epoch time is <span id="currentEpoch">Loading...</span></h2>
+        <h1>Unix Timestamp Converter</h1>
+        
+        <!-- Current Unix timestamp display -->
+        <div class="current-timestamp">
+            <p>The current Unix epoch time is <span id="current-timestamp"></span></p>
         </div>
 
-        <!-- Timestamp Converter Section -->
-        <p>Enter the Unix timestamp to see the conversion in different formats:</p>
-        <input type="text" id="timestampInput" placeholder="Enter Unix Timestamp">
-        <button onclick="convertTimestamp()">Convert Timestamp</button>
+        <!-- Unix timestamp converter -->
+        <div class="timestamp-converter">
+            <h2>Enter Unix Timestamp</h2>
+            <input type="number" id="timestamp" placeholder="Enter Unix timestamp" value="1740019493" />
+            <button id="convert-timestamp">Convert</button>
+            <div id="converted-result" class="result"></div>
+        </div>
 
-        <table id="timestampTable">
-            <tr>
-                <th>Format</th>
-                <th>Seconds</th>
-            </tr>
-            <tr>
-                <td>GMT</td>
-                <td id="gmtTime">Loading...</td>
-            </tr>
-            <tr>
-                <td>Your Time Zone</td>
-                <td id="localTime">Loading...</td>
-            </tr>
-            <tr>
-                <td>Relative</td>
-                <td id="relativeTime" class="relative">Loading...</td>
-            </tr>
-        </table>
+        <div class="separator"></div>
 
-        <!-- Date & Time Converter Section -->
-        <div class="date-conversion">
-            <h3>Enter a Date & Time to Convert to Unix Timestamp:</h3>
-            <div class="form-row">
-                <input type="number" id="year" placeholder="Year" value="2025">
-                <input type="number" id="month" placeholder="Month" value="2">
-                <input type="number" id="day" placeholder="Day" value="20">
-                <input type="number" id="hour" placeholder="Hour (24 hour)" value="2">
-                <input type="number" id="minutes" placeholder="Minutes" value="32">
-                <input type="number" id="seconds" placeholder="Seconds" value="58">
-            </div><br>
-            <button onclick="convertDateToTimestamp()">Convert to Unix Timestamp</button>
-
-            <table id="dateConversionTable">
-                <tr>
-                    <th>Unix Timestamp</th>
-                    <th>GMT</th>
-                    <th>Your Time Zone</th>
-                    <th>Relative</th>
-                </tr>
-                <tr>
-                    <td id="unixTimestampResult">Loading...</td>
-                    <td id="gmtTimeResult">Loading...</td>
-                    <td id="localTimeResult">Loading...</td>
-                    <td id="relativeTimeResult" class="relative">Loading...</td>
-                </tr>
-            </table>
+        <!-- Date and time to Unix timestamp converter -->
+        <div class="date-converter">
+            <h2>Enter a Date & Time</h2>
+            <form id="date-form">
+                <label for="year">Year</label>
+                <input type="number" id="year" name="year" placeholder="2025">
+                <label for="month">Month</label>
+                <input type="number" id="month" name="month" placeholder="02">
+                <label for="day">Day</label>
+                <input type="number" id="day" name="day" placeholder="20">
+                <label for="hour">Hour</label>
+                <input type="number" id="hour" name="hour" placeholder="02">
+                <label for="minute">Minute</label>
+                <input type="number" id="minute" name="minute" placeholder="32">
+                <label for="second">Second</label>
+                <input type="number" id="second" name="second" placeholder="58">
+                <button type="submit">Convert</button>
+            </form>
+            <div id="date-result" class="result"></div>
         </div>
     </div>
 
-    <script>
-        // Fetch current Unix epoch time based on current system time
-        function updateCurrentEpoch() {
-            const currentEpoch = Math.floor(Date.now() / 1000); // Get the current timestamp in seconds
-            document.getElementById('currentEpoch').innerText = currentEpoch;
-        }
-
-        // Function to get query parameter (timestamp)
-        function getQueryParam(name) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(name);
-        }
-
-        // Convert Unix Timestamp to various formats
-        function convertTimestamp() {
-            const timestampInput = document.getElementById('timestampInput').value;
-            const timestamp = parseInt(timestampInput);
-
-            if (!timestampInput || isNaN(timestamp)) {
-                alert('Please enter a valid Unix timestamp');
-                return;
-            }
-
-            // Convert timestamp to different formats
-            const date = new Date(timestamp * 1000); // Convert seconds to milliseconds
-
-            // GMT format
-            const gmtTime = date.toGMTString();
-            document.getElementById('gmtTime').innerText = gmtTime;
-
-            // Local time format (with timezone)
-            const options = { timeZoneName: 'short' };
-            const localTime = date.toLocaleString('en-US', options);
-            document.getElementById('localTime').innerText = localTime;
-
-            // Relative time (e.g., 7 hours ago)
-            const relativeTime = getRelativeTime(date);
-            document.getElementById('relativeTime').innerText = relativeTime;
-        }
-
-        // Function to convert a specific date & time to Unix timestamp
-        function convertDateToTimestamp() {
-            const year = document.getElementById('year').value;
-            const month = document.getElementById('month').value - 1; // Month is 0-indexed
-            const day = document.getElementById('day').value;
-            const hour = document.getElementById('hour').value;
-            const minutes = document.getElementById('minutes').value;
-            const seconds = document.getElementById('seconds').value;
-
-            // Create a Date object from the provided date and time
-            const date = new Date(year, month, day, hour, minutes, seconds);
-            const unixTimestamp = Math.floor(date.getTime() / 1000);
-
-            // Display the converted Unix Timestamp
-            document.getElementById('unixTimestampResult').innerText = unixTimestamp;
-
-            // Convert and display the corresponding time formats
-            const gmtTime = date.toGMTString();
-            document.getElementById('gmtTimeResult').innerText = gmtTime;
-
-            const localTime = date.toLocaleString();
-            document.getElementById('localTimeResult').innerText = localTime;
-
-            const relativeTime = getRelativeTime(date);
-            document.getElementById('relativeTimeResult').innerText = relativeTime;
-        }
-
-        // Function to get relative time (e.g., 7 hours ago)
-        function getRelativeTime(date) {
-            const now = new Date();
-            const diff = now - date; // Difference in milliseconds
-            const seconds = Math.floor(diff / 1000);
-            const minutes = Math.floor(seconds / 60);
-            const hours = Math.floor(minutes / 60);
-            const days = Math.floor(hours / 24);
-
-            if (days > 0) return `${days} day${days > 1 ? 's' : ''} ago`;
-            if (hours > 0) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
-            if (minutes > 0) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
-            return `${seconds} second${seconds > 1 ? 's' : ''} ago`;
-        }
-
-        // On page load
-        window.onload = function() {
-            // Update current Unix timestamp display
-            updateCurrentEpoch();
-
-            const timestampFromUrl = getQueryParam('timestamp');
-            if (timestampFromUrl) {
-                document.getElementById('timestampInput').value = timestampFromUrl;
-                convertTimestamp(); // Convert the timestamp passed in the URL
-            } else {
-                convertTimestamp(); // Convert the default timestamp or the user-entered timestamp
-            }
-        };
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
