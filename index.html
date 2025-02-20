@@ -72,7 +72,7 @@
     <div class="container">
         <h1>Timestamp Converter</h1>
         <p>Enter the Unix timestamp to see the conversion in different formats:</p>
-        <input type="text" id="timestampInput" placeholder="Enter Unix Timestamp" value="1739972391">
+        <input type="text" id="timestampInput" placeholder="Enter Unix Timestamp" value="">
         <button onclick="convertTimestamp()">Convert Timestamp</button>
 
         <table id="timestampTable">
@@ -96,6 +96,11 @@
     </div>
 
     <script>
+        function getQueryParam(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
         function convertTimestamp() {
             const timestampInput = document.getElementById('timestampInput').value;
             const timestamp = parseInt(timestampInput);
@@ -137,7 +142,15 @@
         }
 
         // Convert default timestamp on page load
-        window.onload = convertTimestamp;
+        window.onload = function() {
+            const timestampFromUrl = getQueryParam('timestamp');
+            if (timestampFromUrl) {
+                document.getElementById('timestampInput').value = timestampFromUrl;
+                convertTimestamp(); // Convert the timestamp passed in the URL
+            } else {
+                convertTimestamp(); // Convert the default timestamp or the user-entered timestamp
+            }
+        };
     </script>
 </body>
 </html>
