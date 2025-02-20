@@ -17,7 +17,7 @@
             border-radius: 8px;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
             padding: 20px;
-            max-width: 600px;
+            max-width: 950px;
             margin: 0 auto;
         }
         h1 {
@@ -28,7 +28,7 @@
             font-size: 16px;
             margin-bottom: 10px;
             width: 100%;
-            max-width: 400px;
+            max-width: 250px;
             border-radius: 4px;
             border: 1px solid #ddd;
         }
@@ -71,6 +71,12 @@
         .date-conversion {
             margin-top: 40px;
         }
+        .form-inline {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
     </style>
 </head>
 <body>
@@ -87,6 +93,7 @@
         <p>Enter the Unix timestamp to see the conversion in different formats:</p>
         <input type="text" id="timestampInput" placeholder="Enter Unix Timestamp" value="">
         <button onclick="convertTimestamp()">Convert Timestamp</button>
+        <p id="errorMessage" style="color: red; display: none;">Please enter a valid Unix timestamp.</p>
 
         <table id="timestampTable">
             <tr>
@@ -110,18 +117,14 @@
         <!-- Date & Time Converter Section -->
         <div class="date-conversion">
             <h3>Enter a Date & Time to Convert to Unix Timestamp:</h3>
-            <label>Year</label><br>
-            <input type="number" id="year" value="2025"><br>
-            <label>Month</label><br>
-            <input type="number" id="month" value="2"><br>
-            <label>Day</label><br>
-            <input type="number" id="day" value="20"><br>
-            <label>Hour (24 hour)</label><br>
-            <input type="number" id="hour" value="2"><br>
-            <label>Minutes</label><br>
-            <input type="number" id="minutes" value="32"><br>
-            <label>Seconds</label><br>
-            <input type="number" id="seconds" value="58"><br><br>
+            <div class="form-inline">
+                <input type="number" id="year" value="2025" placeholder="Year">
+                <input type="number" id="month" value="2" placeholder="Month">
+                <input type="number" id="day" value="20" placeholder="Day">
+                <input type="number" id="hour" value="2" placeholder="Hour">
+                <input type="number" id="minutes" value="32" placeholder="Minutes">
+                <input type="number" id="seconds" value="58" placeholder="Seconds">
+            </div><br><br>
             <button onclick="convertDateToTimestamp()">Convert to Unix Timestamp</button>
 
             <table id="dateConversionTable">
@@ -160,9 +163,11 @@
             const timestamp = parseInt(timestampInput);
 
             if (isNaN(timestamp)) {
-                alert('Please enter a valid Unix timestamp');
+                document.getElementById('errorMessage').style.display = "block";
                 return;
             }
+
+            document.getElementById('errorMessage').style.display = "none";
 
             // Convert timestamp to different formats
             const date = new Date(timestamp * 1000); // Convert seconds to milliseconds
@@ -172,7 +177,7 @@
             document.getElementById('gmtTime').innerText = gmtTime;
 
             // Local time format
-            const localTime = date.toLocaleString();
+            const localTime = date.toLocaleString('en-US', { timeZoneName: "short" });
             document.getElementById('localTime').innerText = localTime;
 
             // Relative time (e.g., 7 hours ago)
@@ -200,7 +205,7 @@
             const gmtTime = date.toGMTString();
             document.getElementById('gmtTimeResult').innerText = gmtTime;
 
-            const localTime = date.toLocaleString();
+            const localTime = date.toLocaleString('en-US', { timeZoneName: "short" });
             document.getElementById('localTimeResult').innerText = localTime;
 
             const relativeTime = getRelativeTime(date);
@@ -230,11 +235,4 @@
             const timestampFromUrl = getQueryParam('timestamp');
             if (timestampFromUrl) {
                 document.getElementById('timestampInput').value = timestampFromUrl;
-                convertTimestamp(); // Convert the timestamp passed in the URL
-            } else {
-                convertTimestamp(); // Convert the default timestamp or the user-entered timestamp
-            }
-        };
-    </script>
-</body>
-</html>
+                convertTimestamp(); //
