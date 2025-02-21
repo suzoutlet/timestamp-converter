@@ -103,6 +103,7 @@ window.onload = function() {
        document.getElementById('timestampInput').value = timestampFromUrl;
        convertTimestamp(); // Convert the timestamp passed in the URL
    } else {
+       const currentEpoch = Math.floor(Date.now() / 1000);
        document.getElementById('timestampInput').value = currentEpoch; // Default value
        convertTimestamp(); // Convert the default timestamp or the user-entered timestamp
    }
