@@ -103,7 +103,7 @@ window.onload = function() {
        document.getElementById('timestampInput').value = timestampFromUrl;
        convertTimestamp(); // Convert the timestamp passed in the URL
    } else {
-       document.getElementById('timestampInput').value = "1739993745"; // Default value
+       document.getElementById('timestampInput').value = currentEpoch; // Default value
        convertTimestamp(); // Convert the default timestamp or the user-entered timestamp
    }
 };
