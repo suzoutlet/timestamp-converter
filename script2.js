@@ -32,6 +32,11 @@ function muteInputField() {
   }, 2000); // Reset after 2 seconds
 }
 
+function clearError() {
+ const timestampInput = document.getElementById('timestampInput');
+ timestampInput.style.backgroundColor = "";
+}
+
    // Convert timestamp to different formats
    const date = new Date(timestamp * 1000); // Convert seconds to milliseconds
 
