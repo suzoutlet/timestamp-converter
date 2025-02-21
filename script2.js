@@ -49,55 +49,31 @@ function muteInputField() {
    document.getElementById('relativeTime').innerText = relativeTime;
 }
 
-
-
 // Function to convert a specific date & time to Unix timestamp
-// function convertDateToTimestamp() {
-//    const year = document.getElementById('year').value;
-//    const month = document.getElementById('month').value - 1; // Month is 0-indexed
-//    const day = document.getElementById('day').value;
-//    const hour = document.getElementById('hour').value;
-//    const minutes = document.getElementById('minutes').value;
-//    const seconds = document.getElementById('seconds').value;
-
-//    // Create a Date object from the provided date and time
-//    const date = new Date(year, month, day, hour, minutes, seconds);
-//    const unixTimestamp = Math.floor(date.getTime() / 1000);
-
-//    // Display the converted Unix Timestamp
-//    document.getElementById('unixTimestampResult').innerText = unixTimestamp;
-
-//    // Convert and display the corresponding time formats
-//    const gmtTime = date.toGMTString();
-//    document.getElementById('gmtTimeResult').innerText = gmtTime;
-
-//    const localTime = date.toLocaleString();
-//    document.getElementById('localTimeResult').innerText = localTime;
-
-//    const relativeTime = getRelativeTime(date);
-//    document.getElementById('relativeTimeResult').innerText = relativeTime;
-// }
-
-// Convert Date & Time to Unix Timestamp
 function convertDateToTimestamp() {
-    const year = parseInt(document.getElementById('year').value);
-    const month = parseInt(document.getElementById('month').value) - 1;  // Month is 0-indexed
-    const day = parseInt(document.getElementById('day').value);
-    const hour = parseInt(document.getElementById('hour').value);
-    const minutes = parseInt(document.getElementById('minutes').value);
-    const seconds = parseInt(document.getElementById('seconds').value);
+   const year = document.getElementById('year').value;
+   const month = document.getElementById('month').value - 1; // Month is 0-indexed
+   const day = document.getElementById('day').value;
+   const hour = document.getElementById('hour').value;
+   const minutes = document.getElementById('minutes').value;
+   const seconds = document.getElementById('seconds').value;
 
-    const date = new Date(year, month, day, hour, minutes, seconds);
-    const unixTimestamp = Math.floor(date.getTime() / 1000);
-    
-    const gmtConvertedTime = date.toUTCString();
-    const localConvertedTime = date.toLocaleString();
-    const relativeConvertedTime = timeAgo(unixTimestamp);
+   // Create a Date object from the provided date and time
+   const date = new Date(year, month, day, hour, minutes, seconds);
+   const unixTimestamp = Math.floor(date.getTime() / 1000);
 
-    document.getElementById('unixTimestamp').innerText = unixTimestamp;
-    document.getElementById('gmtConvertedTime').innerText = gmtConvertedTime;
-    document.getElementById('localConvertedTime').innerText = localConvertedTime;
-    document.getElementById('relativeConvertedTime').innerText = relativeConvertedTime;
+   // Display the converted Unix Timestamp
+   document.getElementById('unixTimestampResult').innerText = unixTimestamp;
+
+   // Convert and display the corresponding time formats
+   const gmtTime = date.toGMTString();
+   document.getElementById('gmtTimeResult').innerText = gmtTime;
+
+   const localTime = date.toLocaleString();
+   document.getElementById('localTimeResult').innerText = localTime;
+
+   const relativeTime = getRelativeTime(date);
+   document.getElementById('relativeTimeResult').innerText = relativeTime;
 }
 
 // Function to get relative time (e.g., 7 hours ago)
@@ -130,19 +106,4 @@ window.onload = function() {
        convertTimestamp(); // Convert the default timestamp or the user-entered timestamp
    }
 };
-
-
-// Function to handle GET parameter and pre-fill input if available
-// function handleGetParam() {
-//     const urlParams = new URLSearchParams(window.location.search);
-//     const timestampFromUrl = urlParams.get('timestamp');
-    
-//     if (timestampFromUrl) {
-//         document.getElementById('timestampInput').value = timestampFromUrl;
-//         convertTimestamp();  // Automatically convert based on the timestamp in the URL
-//     } else {
-//         document.getElementById('timestampInput').value = "1739993745"; // Default value
-//         convertTimestamp();  // Convert with default timestamp
-//     }
-// }
 
