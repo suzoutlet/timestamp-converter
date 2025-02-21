@@ -98,13 +98,13 @@ window.onload = function() {
    // Update current Unix timestamp display
    updateCurrentEpoch();
 
-   // const timestampFromUrl = getQueryParam('timestamp');
-   // if (timestampFromUrl) {
-   //     document.getElementById('timestampInput').value = timestampFromUrl;
-   //     convertTimestamp(); // Convert the timestamp passed in the URL
-   // } else {
-   //     convertTimestamp(); // Convert the default timestamp or the user-entered timestamp
-   // }
+   const timestampFromUrl = getQueryParam('timestamp');
+   if (timestampFromUrl) {
+       document.getElementById('timestampInput').value = timestampFromUrl;
+       convertTimestamp(); // Convert the timestamp passed in the URL
+   } else {
+       convertTimestamp(); // Convert the default timestamp or the user-entered timestamp
+   }
 };
 
 
