@@ -98,12 +98,27 @@ window.onload = function() {
    // Update current Unix timestamp display
    updateCurrentEpoch();
 
-   const timestampFromUrl = getQueryParam('timestamp');
-   if (timestampFromUrl) {
-       document.getElementById('timestampInput').value = timestampFromUrl;
-       convertTimestamp(); // Convert the timestamp passed in the URL
-   } else {
-       convertTimestamp(); // Convert the default timestamp or the user-entered timestamp
-   }
+   // const timestampFromUrl = getQueryParam('timestamp');
+   // if (timestampFromUrl) {
+   //     document.getElementById('timestampInput').value = timestampFromUrl;
+   //     convertTimestamp(); // Convert the timestamp passed in the URL
+   // } else {
+   //     convertTimestamp(); // Convert the default timestamp or the user-entered timestamp
+   // }
 };
+
+
+// Function to handle GET parameter and pre-fill input if available
+function handleGetParam() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const timestampFromUrl = urlParams.get('timestamp');
+    
+    if (timestampFromUrl) {
+        document.getElementById('timestampInput').value = timestampFromUrl;
+        convertTimestamp();  // Automatically convert based on the timestamp in the URL
+    } else {
+        document.getElementById('timestampInput').value = "1739993745"; // Default value
+        convertTimestamp();  // Convert with default timestamp
+    }
+}
 
