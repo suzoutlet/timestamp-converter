@@ -14,9 +14,10 @@
         function convertTimestamp() {
             const timestampInput = document.getElementById('timestampInput').value;
             const timestamp = parseInt(timestampInput);
-
-            if (!timestampInput || isNaN(timestamp)) {
-                alert('Please enter a valid Unix timestamp');
+         
+        // Check if the Timestamp field is empty, then mute
+        if (!timestamp || isNaN(timestamp)) {
+                muteInputField();  // Mute the input if invalid timestamp
                 return;
             }
 
